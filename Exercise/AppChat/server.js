@@ -20,16 +20,29 @@ app.use(bodyParser.urlencoded({extended: false}));
 // URL from mLab sandbox database
 var dbUrl = "mongodb://admin:admin1234@ds115971.mlab.com:15971/intanlearn-node";
 
-var messages = [];
+var message = mongoose.model("Message", {
+   name: String,
+   message: String 
+});
+
+//var messages = [];
 
 app.get('/messages', (req, res) => {
-    res.send(messages);
+    message.find({}, (err, messages) => {
+        res.send(messages);
+    });
 });
 
 app.post('/messages', (req, res)=>{
-    messages.push(req.body);
-    io.emit('message', req.body);
-    res.sendStatus(200);
+    var msg = new message(req.body);
+    msg.save((err) => {
+        if(err)
+            sendStatus(500);
+
+        //messages.push(req.body);
+        io.emit('message', req.body);
+        res.sendStatus(200);
+    });
 });
 
 io.on("connection", (socket) => {
