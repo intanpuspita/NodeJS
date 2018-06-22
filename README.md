@@ -107,7 +107,7 @@ Create new *index.html* file in root project folder. We'll create the UI using B
 
 To load *index.html* static file, add the following code before `app.listen` block : `app.use(express.static(__dirname));`
 
-Re-run the server, browser will display content inside HTML file.
+Restart the server, browser will display content inside HTML file.
 
 ### 4. Using routing (GET) in Express
 
@@ -229,7 +229,34 @@ var server = http.listen(3000, () =>{
 });
 ```
 
-Re-run the node and reload the web browser. If it works, the console log will display "A user connected" message.
+Restart the server and reload the web browser. If it works, the console log will display "A user connected" message.
+
+### 7. Create Socket.io event
+
+We'll add socket.io event when posting a message. Open the *server.js* add the following code inside `app.post` block
+
+```
+io.emit('message', req.body);
+```
+
+The code will be like this
+
+```
+app.post('/messages', (req, res)=>{
+    messages.push(req.body);
+    io.emit('message', req.body);
+    res.sendStatus(200);
+});
+```
+
+Now we create event listener in front-end, so once socket.io detect any new message we'll append new message into list of messages. Open *index.html* and add the following code under document ready block
+
+```
+socket.on('message', addMessage);
+```
+
+Restart the server and reload our app in web browser. Try to post a message in two different tab or browser. If a client post a message, it should be instantly shows up in other client.
+
 
 ===
 

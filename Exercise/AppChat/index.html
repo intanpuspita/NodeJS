@@ -35,6 +35,8 @@
         getMessages();
     });
 
+    socket.on('message', addMessage);
+
     function clearVal(){
         $('#name').val('');
         $('#message').val('');
@@ -51,6 +53,6 @@
     }
 
     function postMessage(message){
-        $.post('http://localhost:3000/messages', message, addMessage(message));
+        $.post('http://localhost:3000/messages', message);
     }
 </script>
