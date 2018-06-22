@@ -279,6 +279,48 @@ mongoose.connect(dbUrl, (err) => {
 
 `dbUrl` is a connection string of our database. It should be saved in hidden configuration file, but for now we'll just put it in *server.js*. Restart the server, if it works then the console log will display the message without an error.
 
+### 9. Save data to MongoDB
+
+We have successfully created connection to MongoDB using mongoose. Now we modify the existing get and post message so it will be stored in database. First, add new model using mongoose that will represent message. Add the following code 
+
+```
+var message = mongoose.model("Message", {
+   name: String,
+   message: String 
+});
+```
+
+Modify post message block code into the following code
+
+```
+app.post('/messages', (req, res)=>{
+    var msg = new message(req.body);
+    msg.save((err) => {
+        if(err)
+            sendStatus(500);
+
+        //messages.push(req.body);
+        io.emit('message', req.body);
+        res.sendStatus(200);
+    });
+});
+```
+
+`messages.push(req.body)` is commented because it won't be used anymore. `messages` array also can be deleted. Restart the server and reload our app in browser. Try to add new message data and check the database, the data should be stored in database.
+
+Now we move to get message. Modify get message block code into the following code
+
+```
+app.get('/messages', (req, res) => {
+    message.find({}, (err, messages) => {
+        res.send(messages);
+    });
+});
+```
+
+Restart the server and reload our app in browser. The previous message that we created before should be appear when the page loaded. Since the data stored in database, messages won't disappear everytime we restart the server.
+
+
 ## SQL vs NoSQL
 
 SQL :
