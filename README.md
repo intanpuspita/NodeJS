@@ -258,6 +258,27 @@ socket.on('message', addMessage);
 Restart the server and reload our app in web browser. Try to post a message in two different tab or browser. If a client post a message, it should be instantly shows up in other client.
 
 
+## SQL vs NoSQL
+
+SQL :
+
+- Structured Query Language, the data stored inside it is structured.
+
+- There is a lot of up-front design work
+
+- Sometimes performance and query benefits
+
+- Sometimes performance hits from overhead of this design
+
+NoSQL :
+
+- Just collections of any data
+
+- Less up-front desgin work
+
+- Possible performance increases
+
+
 ===
 
 **Reference :** 
