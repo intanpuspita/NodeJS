@@ -11,7 +11,9 @@
     <div class="jumbotron">
         <h1 class="display-4">Messaging App</h1>
         <br>
-        <input class="form-control" placeholder"Your Name">
+        <input id = "name" class="form-control" placeholder"Your Name">
+        <br>
+        <textarea id = "message" class="form-control" placeholder"Your Message"></textarea>
         <br>
         <button id="send-btn" class="btn btn-success"><span class="fa fa-send" style="margin-right:5px;"></span>Send</button>
     </div>
@@ -24,18 +26,29 @@
 <script>
     $(() => {
         $("#send-btn").click(() =>{
-            addMessage({name: "Intan", message: "Yuhuu"})
+            var message = {name : $('#name').val(), message : $('#message').val()};
+            postMessage(message);
+            clearVal();
         });
         getMessages();
     });
+
+    function clearVal(){
+        $('#name').val('');
+        $('#message').val('');
+    }
 
     function addMessage(message){
         $("#messages").append(`<h4>${message.name}</h4> <p>${message.message}</p>`);
     }
 
     function getMessages(){
-        $.get('http://localhost:3123/messages', (data) =>{
+        $.get('http://localhost:3000/messages', (data) =>{
             data.forEach(addMessage);
         });
+    }
+
+    function postMessage(message){
+        $.post('http://localhost:3000/messages', message, addMessage(message));
     }
 </script>
