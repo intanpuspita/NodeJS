@@ -9,12 +9,16 @@ var bodyParser = require('body-parser');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var mongoose = require('mongoose');
 
 // Load static HTML File
 app.use(express.static(__dirname));
 // Use parser for body that contain json and URL
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+
+// URL from mLab sandbox database
+var dbUrl = "mongodb://admin:admin1234@ds115971.mlab.com:15971/intanlearn-node";
 
 var messages = [];
 
@@ -30,6 +34,11 @@ app.post('/messages', (req, res)=>{
 
 io.on("connection", (socket) => {
     console.log('A user connected');
+});
+
+// Connect to MongoDB
+mongoose.connect(dbUrl, (err) => {
+    console.log("Mongo DB Connection", err);
 });
 
 // Listen to port 3000

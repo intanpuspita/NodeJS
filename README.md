@@ -14,8 +14,6 @@ Download the installer from https://nodejs.org/en/download/.
 
 To check version of NodeJS run `Node -v` in cmd.
 
-To install third party packages run the following script `npm install` or `npm install <package name>`
-
 **2. Create package.json**
 
 To create package.json, run `npm init` and fill the information or `npm init --yes` for the faster way
@@ -28,7 +26,15 @@ To create package.json, run `npm init` and fill the information or `npm init --y
 
 [Socket.io](https://socket.io/) enables realtime, bidirectional event based communication between client and server. The idea of using socket.io is client or browser are able to send requests to Node, but there is no way to do it in reverse. To install socket.io in Node, run the following script `npm install -s socket.io`.
 
-**5. Install nodemon**
+**5. Install MongoDB**
+
+MongoDB could be downloaded and installed locally, but when publishing the app it needs to be host seperately or find a third party host for it. For this exercise we'll create free sandbox database in [mLab](https://mlab.com/).
+
+**6. Instal Mongoose**
+
+[Mongoose](http://mongoosejs.com/) is Object Document Mapper (ODM) library for MongoDB and NodeJS. It used to translate documents in MongoDB database to objects in code. To install mongoose, run the following script `npm install -s mongoose`.
+
+**7. Install nodemon**
 
 Nodemon is utility to monitor any changes in source code and automatically restart the server. 
 Run the following script to install nodemon `npm install -g nodemon` (using `-g` so it will be installed globally. 
@@ -257,6 +263,21 @@ socket.on('message', addMessage);
 
 Restart the server and reload our app in web browser. Try to post a message in two different tab or browser. If a client post a message, it should be instantly shows up in other client.
 
+### 8. Connect to MongoDB
+
+For this example, we create MongoDB database in mLab. Create a database and install mongoose in the project. After mongoose installed, add it in *server.js* file with the following code :
+
+```
+var mongoose = require('mongoose');
+
+var dbUrl = "mongodb://admin:admin1234@ds115971.mlab.com:15971/intanlearn-node";
+
+mongoose.connect(dbUrl, (err) => {
+    console.log("Mongo DB Connection", err);
+});
+```
+
+`dbUrl` is a connection string of our database. It should be saved in hidden configuration file, but for now we'll just put it in *server.js*. Restart the server, if it works then the console log will display the message without an error.
 
 ## SQL vs NoSQL
 
@@ -290,5 +311,9 @@ Mitrais e-Learning : NodeJS
 https://www.nodebeginner.org/#building-the-application-stack
 
 https://blog.codeship.com/node-js-tutorial/
+
+https://medium.freecodecamp.org/introduction-to-mongoose-for-mongodb-d2a7aa593c57
+
+https://medium.com/chingu/an-overview-of-mongodb-mongoose-b980858a8994
 
 [NodeJS Documentation](https://nodejs.org/en/docs/)
