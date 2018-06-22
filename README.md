@@ -26,7 +26,7 @@ To create package.json, run `npm init` and fill the information or `npm init --y
 
 **4. Socket.io**
 
-[Socket.io](https://socket.io/) enables realtime, bidirectional event based communication between client and server.
+[Socket.io](https://socket.io/) enables realtime, bidirectional event based communication between client and server. The idea of using socket.io is client or browser are able to send requests to Node, but there is no way to do it in reverse. To install socket.io in Node, run the following script `npm install -s socket.io`.
 
 **5. Install nodemon**
 
@@ -61,7 +61,7 @@ For more file system operation that can be done by this module, please check [Fi
 
 ### 3. Create Server File with Express
 
-From this section, we'll create a messaging application using NodeJS, Express, and Socket.io by following the instruction in Lynda.com online course.
+From this section, we'll create a messaging application using NodeJS, Express, and Socket.io by following the instruction in Lynda.com online course. For complete code, please refer to folder *Exercise/AppChat*.
 
 In previous section, we created basic server module. In this section we create server file using Express. First create a package.json file using `npm init`. Once it is created, install Express in root project folder using above script. 
 
@@ -192,12 +192,44 @@ Express has no built-in support to parse the body, so we'll use a package that w
 
 In our initial document ready block, we add new event `onclick` for `send` button. Once it is clicked, it will call `postMessage` function that will send POST request. After message posted, we set the callback to `addMessage` function, so the list of messages will be refresh. `clearVal` function is used to reset form into empty after message successfully posted. Reload our app in browser to check if it works.
 
+### 6. Connect to Socket.io
 
+As mentioned before, we can make server send request to client by using only Node. In this messaging app, we want to make our list of messages refresh if there is another sent a message. With Socket.io, we will be able to notify clients when another user has sent a chat message. Install socket.io by using above script. After installed, open *server.js* file and add the following code :
 
-## Notes :
+```
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+```
 
-- To execute `AppChat` project, please install Express (execute above script) and Body Parser (`npm install -s body-parser`) 
+Now we setup socket.io in front-end. Add the following script tag in *index.html*
 
+```
+<script src="/socket.io/socket.io.js"></script>
+```
+
+To initialize socket.io in front-end add the following code inside the javascript script tag
+
+```
+var socket = io();
+```
+
+In *server.js* add the following code on top of `app.listen` code to check connection to socket io
+
+```
+io.on("connection", (socket) => {
+    console.log('A user connected');
+});
+```
+
+Since we want to make Express and socket.io running at the same time, we will use `http.listen` instead of `app.listen`. The code will be like this
+
+```
+var server = http.listen(3000, () =>{
+    console.log("Server is listening on port", server.address().port);
+});
+```
+
+Re-run the node and reload the web browser. If it works, the console log will display "A user connected" message.
 
 ===
 
