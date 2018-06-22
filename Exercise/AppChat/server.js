@@ -7,6 +7,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
 // Load static HTML File
 app.use(express.static(__dirname));
@@ -25,8 +27,12 @@ app.post('/messages', (req, res)=>{
     res.sendStatus(200);
 });
 
+io.on("connection", (socket) => {
+    console.log('A user connected');
+});
+
 // Listen to port 3000
-var server = app.listen(3000, () =>{
+var server = http.listen(3000, () =>{
     console.log("Server is listening on port", server.address().port);
 });
 
